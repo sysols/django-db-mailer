@@ -39,6 +39,7 @@ class Sender(object):
         self._backend = kwargs.pop('backend')
         self._provider = kwargs.pop('provider', self.provider)
         self._signals_kw = kwargs.pop('signals_kwargs', {})
+        self._site = kwargs.pop('site', None)
 
         self._template = self._get_template()
         self._context = self._get_context(args)
@@ -83,7 +84,7 @@ class Sender(object):
 
     def _get_context(self, context_list):
         try:
-            data = self._model_to_dict(Site.objects.get_current())
+            data = self._model_to_dict(self._site or Site.objects.get_current())
         except Site.DoesNotExist:
             data = {}
 
