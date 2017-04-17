@@ -147,7 +147,10 @@ class Sender(object):
             return message
         if ENABLE_LOGGING and self._template.enable_log:
             try:
-                domain = Site.objects.get_current().domain
+                if self._site:
+                    domain = self._site.domain
+                else:
+                    domain = Site.objects.get_current().domain
                 encrypted = signing.dumps(self._log_id, compress=True)
                 path = reverse('db-mail-tracker', args=[encrypted])
                 message += defaults.TRACK_HTML % {
